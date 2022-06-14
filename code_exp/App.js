@@ -1,17 +1,14 @@
-import { db } from "./firebase-config";
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, } from "firebase/firestore";
-
 // DUMMY DATA:
 
 const dummyUser1 = {
   username: 'janesmith2022',
   password: 'Dsta@2022',
   realName: 'Jane Smith',
-  chats: ['Ashish Chugh', 'Henry Khoo'],
+  chats: ['Ashish Chugh'],
   posts: ['[National Service] When is my next NS reservist cycle?', 'How likely will Singapore increase her security alert?'],
   comments: [],
   connections: [dummyUser2, dummyUser3],
-  unit: 'SPF PROCOM', 
+  unit: 'SPF PROCOM',
   vocation: 'DXO',
   occupation: 'Software Engineer',
   organisation: 'Google Inc.'
@@ -59,6 +56,9 @@ const forumPost2 = {
 //const forumPosts = [forumPost1, forumPost2];
 const forumPosts = ['title1', 'title2'];
 
+import { db } from "./firebase-config";
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, } from "firebase/firestore";
+
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { TouchableOpacity, Image, StyleSheet, Text, View, Button, TextInput, KeyboardAvoidingView } from 'react-native';
@@ -96,7 +96,6 @@ function WelcomeScreen({ navigation }) {
     </View>
   )
 }
-
 
 //Login Screen Markup
 function LoginScreen({ navigation }) {
@@ -249,17 +248,18 @@ function AddPostScreen({ route, navigation }) {
   
   const { username } = route.params;
 
+  //PSEUDO CODE (HARDCODED)
   return (
     <View style={{flex:1}}>
       <View style={{flex:1, flexDirection:'row'}}>
         <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-          <MaterialIcons name='arrow-back-ios' size={30} color='white' onPress={() => navigation.navigate('Home')}/>
+          <MaterialIcons name='arrow-back-ios' size={30} color='white' onPress={() => navigation.navigate('Home')} />
         </View>
         <View style={{flex:4, alignItems:'center', justifyContent:'center'}}>
           <Text style={{color:'white', fontSize:30, fontWeight:'bold'}}>Create New Post</Text>
         </View>
         <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-          <MaterialIcons name='post-add' size={30} color='white' onPress={(event) => {addPost(userData.id,event.tartget.value); navigation.navigate('Home')}} />
+          <MaterialIcons name='post-add' size={30} color='white' onPress={() => navigation.navigate('Home')} />
         </View>
       </View>
       <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
@@ -278,24 +278,57 @@ function HomeScreen({ route, navigation }) {
   const { username } = route.params;
 
   function ForumPosts() {
-    
+    //PSEUDO DATA FOR SS PURPOSES
     return (
-      <View>
-        {forumPosts.map((post, index) => (
-            <View style={{alignItems:'flex-start', alignItems:'center'}}>
-              {/* PSEUDO CHAT, TO BE REPLACED WITH REAL DATA LATER */}
-              <TouchableOpacity style={styles.chatBox} onPress={() => navigation.navigate('ChatRoom', { targetName: 'James Sin' })}>
-                <Image style={{height:30, width:30}} source={require('./assets/default-user-icon.png')}/>
-                <Text style={{color:'white', fontSize:20, fontWeight:'bold'}} key={index}>{post.author}</Text>
-              </TouchableOpacity>
+      <View style={{width:'100%'}}>
+        <View style={styles.chatBox} >
+          {/* PSEUDO CHAT, TO BE REPLACED WITH REAL DATA LATER */}
+          <TouchableOpacity onPress={() => alert('Feature under development')}>
+            <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>[National Service] When will my next NS reservist be?</Text>
+            <View style={{flexDirection:'row', alignItems:'center', marginVertical:5}}>
+              <Image style={{height:20, width:20}} source={require('./assets/default-user-icon.png')}/>
+              <Text style={{color:'white', marginHorizontal:5}}>James Sin</Text>
             </View>
-        ))}
+          </TouchableOpacity>
+        </View>
+        <View style={styles.chatBox} >
+          {/* PSEUDO CHAT, TO BE REPLACED WITH REAL DATA LATER */}
+          <TouchableOpacity onPress={() => alert('Feature under development')}>
+            <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>Anybody free for coffee tomorrow?</Text>
+            <View style={{flexDirection:'row', alignItems:'center', marginVertical:5}}>
+              <Image style={{height:20, width:20}} source={require('./assets/default-user-icon.png')}/>
+              <Text style={{color:'white', marginHorizontal:5}}>Ashish Chugh</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.chatBox} >
+          {/* PSEUDO CHAT, TO BE REPLACED WITH REAL DATA LATER */}
+          <TouchableOpacity onPress={() => alert('Feature under development')}>
+            <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>[National Service] How likely will Singapore increase her security alert?</Text>
+            <View style={{flexDirection:'row', alignItems:'center', marginVertical:5}}>
+              <Image style={{height:20, width:20}} source={require('./assets/default-user-icon.png')}/>
+              <Text style={{color:'white', marginHorizontal:5}}>Henry Khoo</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.chatBox} >
+          {/* PSEUDO CHAT, TO BE REPLACED WITH REAL DATA LATER */}
+          <TouchableOpacity onPress={() => alert('Feature under development')}>
+            <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>[National Service] What should I expect for my upcoming reservist cycle?</Text>
+            <View style={{flexDirection:'row', alignItems:'center', marginVertical:5}}>
+              <Image style={{height:20, width:20}} source={require('./assets/default-user-icon.png')}/>
+              <Text style={{color:'white', marginHorizontal:5}}>Tang Zuqing</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
+      
+      
     )
   }
 
   return (
-    <View style={{flex:1, backgroundColor:'black'}}>
+    <View style={{flex:1, backgroundColor:'black', alignItems:'center'}}>
       <View style={{flex:4, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
         <View style={{flex:1}}></View>
         <View style={{flex:1, alignItems:'center'}}>
@@ -312,7 +345,7 @@ function HomeScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{flex:0.1, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+      <View style={{flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
         <View style={{flex:2, alignItems:'flex-end'}}>
           <TextInput
           style={styles.searchFields}
@@ -320,7 +353,7 @@ function HomeScreen({ route, navigation }) {
         </View>
         <View style={{flex:1, alignItems:'center'}}>
           {/* MATCH THE SEARCH TO THE DATABASE, THEN DISPLAY THE RESULT (See 'onPress' prop)*/}
-          <TouchableOpacity style={{flexDirection:'row', height:30, width:110, borderRadius:10,backgroundColor:'blue'}} activeOpacity={0.5} onPress={() => alert('hihi')}>
+          <TouchableOpacity style={{flexDirection:'row', height:30, width:110, borderRadius:10,backgroundColor:'blue'}} activeOpacity={0.5} onPress={() => alert('Feature under Development')}>
             <View style={{flex:3, alignItems:'center', justifyContent:'center'}}>
               <FontAwesome name='search' color='white' size={20} underlayColor='gray'/>
             </View>
@@ -330,7 +363,7 @@ function HomeScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{flex:12, alignItems:'center', justifyContent:'center'}}>
+      <View style={{flex:10, alignItems:'center', justifyContent:'flex-start', backgroundColor:'#202020', borderRadius:10, width:'93%', marginBottom:10, padding: 10}}>
         <ForumPosts></ForumPosts>
       </View>
     </View>
@@ -368,11 +401,10 @@ function ChatScreenNavigation({ navigation, route }) {
   
   return (
       <ChatStack.Navigator>
-        <ChatStack.Group screenOptions={{ contentStyle:{backgroundColor:'black'}}}>
+        <ChatStack.Group screenOptions={{ contentStyle:{backgroundColor:'black'}, headerShown:false}}>
           <ChatStack.Screen
             name='Chats'
             component={ChatScreen}
-            options={{ headerShown: false }}
             initialParams={{ userData: userData }}/>
           <ChatStack.Screen
             name='ChatRoom'
@@ -395,9 +427,9 @@ function ChatScreen({ navigation, route }) {
         {userData.chats.map((user, index) => (
             <View style={{alignItems:'flex-start', alignItems:'center'}}>
               {/* PSEUDO CHAT, TO BE REPLACED WITH REAL DATA LATER */}
-              <TouchableOpacity style={styles.chatBox} onPress={() => navigation.navigate('ChatRoom', { targetName: 'James Sin' })}>
+              <TouchableOpacity style={styles.chatBox} onPress={() => navigation.navigate('ChatRoom')}>
                 <Image style={{height:30, width:30}} source={require('./assets/default-user-icon.png')}/>
-                <Text style={{color:'white', fontSize:20, fontWeight:'bold'}} key={index}>{user.realName}</Text>
+                <Text style={{color:'white', fontSize:20, fontWeight:'bold'}} key={index}>{user}</Text>
               </TouchableOpacity>
             </View>
         ))}
@@ -414,7 +446,6 @@ function ChatScreen({ navigation, route }) {
         <ChatBox></ChatBox>
       </View>
     </View>
-    
   )
 }
 
@@ -430,11 +461,24 @@ function ChatRoomScreen({ navigation }) {
           <Image style={{height:30, width:30}} source={require('./assets/default-user-icon.png')}/>
         </View>
         <View style={{flex:8, alignItems:'flex-start', justifyContent:'center'}}>
-          <Text style={{color:'white', fontSize:30, fontWeight:'bold'}}>John Smith</Text>
+          <Text style={{color:'white', fontSize:30, fontWeight:'bold'}}>Ashish Chugh</Text>
+        </View>
+        <View ></View>
+      </View>
+      <View style={{flex:2, alignItems:'center'}}>
+        <View style={{backgroundColor:'#202020', width:'93%', height:40, padding:10, borderRadius:8, marginBottom:10}}>
+          <Text style={{color:'white'}} >Hey bro! Do you remember me?</Text>
+        </View>
+        <View style={{backgroundColor:'maroon', width:'93%', height:40, padding:10, borderRadius:8, marginBottom:10}}>
+          <Text style={{color:'white'}} >Of course bro how can don't remember you!</Text>
+        </View>
+        <View style={{backgroundColor:'#202020', width:'93%', height:40, padding:10, borderRadius:8, marginBottom:10}}>
+          <Text style={{color:'white'}} >Nice la meet sometime?</Text>
+        </View>
+        <View style={{backgroundColor:'maroon', width:'93%', height:40, padding:10, borderRadius:8, marginBottom:10}}>
+          <Text style={{color:'white'}} >Ok sure!</Text>
         </View>
       </View>
-      <View style={{flex:2}}></View>
-      <KeyboardAvoidingView behavior='padding'>
         <View style={{flex:0.2, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
           <View style={{flex:2, alignItems:'flex-end'}}>
             <TextInput
@@ -448,7 +492,6 @@ function ChatRoomScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-      </KeyboardAvoidingView>
     </View>
     
   )
@@ -483,6 +526,8 @@ function ProfileScreen({ route, navigation }) {
   const [commentThickness, updateCommentThickness] = React.useState('normal');
 
   function PostBox() {
+
+    
 
     if(dataType == 'post') {
       if(userData.posts.length == 0) {
@@ -537,6 +582,9 @@ function ProfileScreen({ route, navigation }) {
         </View>
       )
     }
+
+    
+    
   }
 
   return (
@@ -728,10 +776,13 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   chatBox: {
-    width: '90%',
-    height: 50,
+    width: '100%',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 10,
     flexDirection: 'row',
-    alignItems:'center'
+    alignItems:'center',
+    backgroundColor: '#101010'
   },
   postBox: {
     width: '97%',
