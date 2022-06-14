@@ -97,21 +97,6 @@ function WelcomeScreen({ navigation }) {
   )
 }
 
-function App(){
-  const [users1, setUsers] = useState([]);
-  const usersCollectionRef = collection(db,"users");
-
-  useEffect( ()=> {
-    const getUsers = async () => {
-      const data = await getDocs(usersCollectionRef);
-      setUsers(data.docs.map((doc) => ({ ...doc.data(),id: doc.id})));
-    };
-
-    getUsers();
-  }, [])
-}
-
-console.log(users1);
 
 //Login Screen Markup
 function LoginScreen({ navigation }) {
@@ -253,6 +238,12 @@ function HomeScreenNavigation({ navigation, route }) {
   )
 }
 
+const addPost = async (id, newpost) => {
+  const userDoc = doc(db,"users",id);
+  const newFields = { posts : {...userData.posts,newpost}}
+  await updateDoc(userDoc,newFields);
+}
+
 //AddPost Markup 
 function AddPostScreen({ route, navigation }) {
   
@@ -262,13 +253,13 @@ function AddPostScreen({ route, navigation }) {
     <View style={{flex:1}}>
       <View style={{flex:1, flexDirection:'row'}}>
         <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-          <MaterialIcons name='arrow-back-ios' size={30} color='white' onPress={() => navigation.navigate('Home')} />
+          <MaterialIcons name='arrow-back-ios' size={30} color='white' onPress={() => navigation.navigate('Home')}/>
         </View>
         <View style={{flex:4, alignItems:'center', justifyContent:'center'}}>
           <Text style={{color:'white', fontSize:30, fontWeight:'bold'}}>Create New Post</Text>
         </View>
         <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-          <MaterialIcons name='post-add' size={30} color='white' onPress={() => navigation.navigate('Home')} />
+          <MaterialIcons name='post-add' size={30} color='white' onPress={(event) => {addPost(userData.id,event.tartget.value); navigation.navigate('Home')}} />
         </View>
       </View>
       <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
@@ -493,8 +484,6 @@ function ProfileScreen({ route, navigation }) {
 
   function PostBox() {
 
-    
-
     if(dataType == 'post') {
       if(userData.posts.length == 0) {
         return (
@@ -548,9 +537,6 @@ function ProfileScreen({ route, navigation }) {
         </View>
       )
     }
-
-    
-    
   }
 
   return (
@@ -631,6 +617,21 @@ function ProfileScreen({ route, navigation }) {
   )
 }
 
+
+//   onclick/ onPress will trigger updateProfile 
+const updateProfile = async (userData,newUnit,newVocation,newOccupation,newOrganisation) => {
+  const userDoc = doc(db,"users",userData.id);
+
+  const newFields = { 
+    unit : newUnit,
+    vocation : newVocation,
+    occupation : newOccupation,
+    organisation : newOrganisation}
+
+  await updateDoc(userDoc,newFields);
+
+}
+
 //ProfileSettings Markup
 function ProfileSettingsScreen({ route, navigation }) {
 
@@ -647,6 +648,18 @@ function ProfileSettingsScreen({ route, navigation }) {
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const [users, setUsers] = useState([]);
+  const usersCollectionRef = collection(db,"users");
+
+  useEffect( ()=> {
+    const getUsers = async () => {
+      const data = await getDocs(usersCollectionRef);
+      setUsers(data.docs.map((doc) => ({ ...doc.data(),id: doc.id})));
+    };
+
+    getUsers();
+  }, [])
+  
   return (
     <NavigationContainer>
       <Stack.Navigator>
